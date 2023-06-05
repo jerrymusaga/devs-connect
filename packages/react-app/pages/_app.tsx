@@ -7,8 +7,10 @@ import { Alfajores, Celo } from "@celo/rainbowkit-celo/chains";
 import Layout from "../components/Layout";
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
+import { SessionProvider } from "next-auth/react";
 
-const projectId = "celo-composer-project-id" // get one at https://cloud.walletconnect.com/app
+
+const projectId = "b6a680ae090895b53124f948e7362b0f" // get one at https://cloud.walletconnect.com/app
 
 const { chains, publicClient } = configureChains(
   [Alfajores, Celo],
@@ -27,9 +29,11 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains} coolMode={true}>
+        <SessionProvider>
         <Layout>
           <Component {...pageProps} />
         </Layout>
+        </SessionProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   )
