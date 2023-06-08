@@ -1,5 +1,16 @@
 import { signIn, useSession, signOut} from "next-auth/react"
 import Link from "next/link";
+import { 
+  ALFAJORES_CUSD_ADDRESS,
+  ALFAJORES_RPC,
+  FA_PROXY_ADDRESS,
+  FA_CONTRACT,
+  ODIS_PAYMENTS_PROXY_ADDRESS,
+  ODIS_PAYMENTS_CONTRACT,
+  STABLE_TOKEN_CONTRACT,
+  ISSUER_PRIVATE_KEY,
+  DEK_PRIVATE_KEY,
+} from "@/utils/constants";
 import { OdisUtils } from "@celo/identity";
 import { AuthenticationMethod } from "@celo/identity/lib/odis/query";
 import { ethers, Wallet } from "ethers";
@@ -28,7 +39,7 @@ export default function Home() {
   //step 3- identifier and address to send value
   let [identifierToSendTo, setIdentifierToSendTo] = useState("");
   let [addressToSendTo, setAddressToSendTo] = useState("");
-  
+
 
 
     if (session) {
