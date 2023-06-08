@@ -1,10 +1,36 @@
 import { signIn, useSession, signOut} from "next-auth/react"
 import Link from "next/link";
+import { OdisUtils } from "@celo/identity";
+import { AuthenticationMethod } from "@celo/identity/lib/odis/query";
+import { ethers, Wallet } from "ethers";
+import { BlsBlindingClient } from "@/utils/bls-blinding-client";
+import { parseEther } from "viem";
+import { LockOpenIcon, LockClosedIcon } from "@heroicons/react/24/outline";
+import { useAccount, useSendTransaction } from "wagmi";
+import { ISocialConnect } from "@/utils/ISocialConnect";
+import { isMounted } from "@/hooks/useIsMounted";
+import { useState } from "react";
 
 
 export default function Home() {
 
+  let iMounted = isMounted();
+
+  let [sc, setSc] = useState<ISocialConnect>();
+
+  //step 1- get the connected wallet address
+  let {address} = useAccount();
+
+  //step 2- session fro github and resolution of social identifier
   const { data: session } = useSession();
+  let [socialIdentifier, setSocialIdentifier] = useState('');
+
+  //step 3- identifier and address to send value
+  let [identifierToSendTo, setIdentifierToSendTo] = useState("");
+  let [addressToSendTo, setAddressToSendTo] = useState("");
+  
+
+
     if (session) {
         return (
             <div>
