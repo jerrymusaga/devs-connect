@@ -19,6 +19,6 @@ export interface ISocialConnect {
 
     //contract
     federatedAttestationsContract: ethers.Contract;
-    odisPaymentContract: ethers.Contract;
+    odisPaymentsContract: ethers.Contract;
     stableTokenContract: ethers.Contract;
 }

@@ -7,6 +7,8 @@ import ODIS_PAYMENTS_CONTRACT from "../abis/OdisPayments.json";
 import STABLE_TOKEN_CONTRACT from "../abis/StableToken.json";
 import ACCOUNTS_CONTRACT from "../abis/Accounts.json";
 
+require('dotenv').config()
+
 export const ALFAJORES_RPC = process.env.ALFAJORES_RPC;
 export const ALFAJORES_ACCOUNT = process.env.ALFAJORES_ACCOUNT;
 export const ALFAJORES_ACCOUNT_PK =process.env.ALFAJORES_ACCOUNT_PK;
