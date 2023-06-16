@@ -1,96 +1,61 @@
-// "use client";
+"use client";
 
-// import { useState, useEffect } from "react";
+import prisma from "@/libs/prisma";
+import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
 
-// import DevsCard from "./DevsCard";
+import DevsCard from "./DevsCard";
 
-// const PromptCardList = ({ data, handleTagClick }) => {
-//   return (
-//     <div className='mt-16 prompt_layout'>
-//       {data.map((post) => (
-//         <DevsCard
-//           key={post._id}
-//           post={post}
-//           handleTagClick={handleTagClick}
-//         />
-//       ))}
-//     </div>
-//   );
-// };
+const DevCardList = () => {
+  return (
+    <div className=' prompt_layout'>
+      {
+          <DevsCard  /> 
+      }
+      
+    </div>
+  );
+};
 
-// const Feed = () => {
-//   const [allPosts, setAllPosts] = useState([]);
+const Feed = () => {
+  const [devs, setAllDevs] = useState([]);
+  const {data: session} = useSession()
+  
 
-//   // Search states
-//   const [searchText, setSearchText] = useState("");
-//   const [searchTimeout, setSearchTimeout] = useState(null);
-//   const [searchedResults, setSearchedResults] = useState([]);
+  //Fetch all developers from the database
+  // const fetchDevs = async () => {
+  //   const response = await prisma.user.findUnique({
+      
+  //   })
+    
 
-//   const fetchPosts = async () => {
-//     const response = await fetch("/api/prompt");
-//     const data = await response.json();
+  //   setAllDevs(response);
+  // };
 
-//     setAllPosts(data);
-//   };
+  // useEffect(() => {
+  //   fetchDevs();
+  // }, []);
 
-//   useEffect(() => {
-//     fetchPosts();
-//   }, []);
+  
 
-//   const filterPrompts = (searchtext) => {
-//     const regex = new RegExp(searchtext, "i"); // 'i' flag for case-insensitive search
-//     return allPosts.filter(
-//       (item) =>
-//         regex.test(item.creator.username) ||
-//         regex.test(item.tag) ||
-//         regex.test(item.prompt)
-//     );
-//   };
 
-//   const handleSearchChange = (e) => {
-//     clearTimeout(searchTimeout);
-//     setSearchText(e.target.value);
+  return (
+    <section className='feed'>
+      
+      <form className='relative w-full flex-center'>
+        <input
+          type='text'
+          placeholder='Search for developers using github usernames or Masa Soulnames'
+          className='search_input peer'
+        />
+      </form>
+      <div className='orange_gradient text-center'><h1>Developers on Dev Connect</h1></div>
+      <DevCardList />
+     
+    </section>
+  );
+};
 
-//     // debounce method
-//     setSearchTimeout(
-//       setTimeout(() => {
-//         const searchResult = filterPrompts(e.target.value);
-//         setSearchedResults(searchResult);
-//       }, 500)
-//     );
-//   };
 
-//   const handleTagClick = (tagName) => {
-//     setSearchText(tagName);
 
-//     const searchResult = filterPrompts(tagName);
-//     setSearchedResults(searchResult);
-//   };
-
-//   return (
-//     <section className='feed'>
-//       <form className='relative w-full flex-center'>
-//         <input
-//           type='text'
-//           placeholder='Search for a tag or a username'
-//           value={searchText}
-//           onChange={handleSearchChange}
-//           required
-//           className='search_input peer'
-//         />
-//       </form>
-
-//       {/* All Prompts */}
-//       {searchText ? (
-//         <PromptCardList
-//           data={searchedResults}
-//           handleTagClick={handleTagClick}
-//         />
-//       ) : (
-//         <PromptCardList data={allPosts} handleTagClick={handleTagClick} />
-//       )}
-//     </section>
-//   );
-// };
-
-// export default Feed;
+export default Feed;
