@@ -2,11 +2,14 @@ import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
+import Image from "next/image";
 
 
 export default function Header() {
 
-    const {status} = useSession();
+    const {status, data: session} = useSession();
+    console.log(session?.user?.image)
  
     return (
       <Disclosure as="nav" className="bg_orange_gradient  border-b border-black">
@@ -40,6 +43,19 @@ export default function Header() {
                   </div>
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                {
+                  status === "authenticated" ? (
+                    <Link href='/profile'>
+                      <Image
+                        src={session?.user?.image}
+                        width={37}
+                        height={37}
+                        className='rounded-full'
+                        alt='profile'
+                      />
+                    </Link>
+                  ) : null
+                }
                 <ConnectButton showBalance={{smallScreen: true, largeScreen: false}} />
                 </div>
               </div>

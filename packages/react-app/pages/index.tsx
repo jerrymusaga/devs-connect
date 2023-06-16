@@ -41,6 +41,8 @@ export default function Home() {
     let [identifierToSendTo, setIdentifierToSendTo] = useState("");
     let [addressToSendTo, setAddressToSendTo] = useState("");
 
+    // const ISSUER_PRIVATE_KEY = "0x726e53db4f0a79dfd63f58b19874896fce3748fcb80874665e0c147369c04a37"
+
     useEffect(() => {
       let provider = new ethers.providers.JsonRpcProvider(ALFAJORES_RPC);
       let issuer = new Wallet(ISSUER_PRIVATE_KEY!, provider);
