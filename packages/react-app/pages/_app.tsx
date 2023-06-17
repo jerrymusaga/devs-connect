@@ -10,6 +10,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { SessionProvider } from "next-auth/react";
 
 
+
 const projectId = "b6a680ae090895b53124f948e7362b0f" // get one at https://cloud.walletconnect.com/app
 
 const { chains, publicClient } = configureChains(
