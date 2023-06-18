@@ -1,226 +1,11 @@
 import { signIn, useSession, signOut} from "next-auth/react"
 import Link from "next/link";
-import { 
-  ALFAJORES_CUSD_ADDRESS,
-  ALFAJORES_RPC,
-  FA_PROXY_ADDRESS,
-  FA_CONTRACT,
-  ODIS_PAYMENTS_PROXY_ADDRESS,
-  ODIS_PAYMENTS_CONTRACT,
-  STABLE_TOKEN_CONTRACT,
-  ISSUER_PRIVATE_KEY,
-  DEK_PRIVATE_KEY,
-} from "@/utils/constants";
-import { OdisUtils } from "@celo/identity";
-import { AuthenticationMethod, AuthSigner, OdisContextName } from "@celo/identity/lib/odis/query";
-import { ethers, Wallet } from "ethers";
-import WebBlsBlindingClient, { BlsBlindingClient } from "@/utils/bls-blinding-client";
-import { parseEther } from "viem";
-import { LockOpenIcon, LockClosedIcon } from "@heroicons/react/24/outline";
-import { useAccount, useSendTransaction } from "wagmi";
-import { ISocialConnect } from "@/utils/ISocialConnect";
-import { isMounted } from "@/hooks/useIsMounted";
-import { useEffect, useState } from "react";
-import { getObfuscatedIdentifier } from "@celo/identity/lib/odis/identifier";
-
 import Feed from "@/components/Feeds";
 
 
 export default function Home() {
 
-    let iMounted = isMounted();
-
-    let [sc, setSc] = useState<ISocialConnect>();
-
-    //step 1- get the connected wallet address
-    let {address} = useAccount();
-
-    //step 2- session fro github and resolution of social identifier
-    const { data: session } = useSession();
-    let [socialIdentifier, setSocialIdentifier] = useState('');
-
-    //step 3- identifier and address to send value
-    let [identifierToSendTo, setIdentifierToSendTo] = useState("");
-    let [addressToSendTo, setAddressToSendTo] = useState("");
-
-    // const ISSUER_PRIVATE_KEY = "0x726e53db4f0a79dfd63f58b19874896fce3748fcb80874665e0c147369c04a37"
-
-    useEffect(() => {
-      let provider = new ethers.providers.JsonRpcProvider(ALFAJORES_RPC);
-      let issuer = new Wallet(ISSUER_PRIVATE_KEY!, provider);
-      let serviceContext = OdisUtils.Query.getServiceContext(OdisContextName.ALFAJORES);
-      let blindingClient = new WebBlsBlindingClient(serviceContext.odisPubKey);
-      let quotaFee = ethers.utils.parseEther('0.01');
-      let authSigner: AuthSigner = {
-        authenticationMethod: AuthenticationMethod.ENCRYPTION_KEY,
-        rawKey: DEK_PRIVATE_KEY!
-      }; 
-      let federatedAttestationsContract = new ethers.Contract(
-        FA_PROXY_ADDRESS!,
-        FA_CONTRACT.abi,
-        issuer
-      );
-      let odisPaymentsContract = new ethers.Contract(
-        ODIS_PAYMENTS_PROXY_ADDRESS!,
-        ODIS_PAYMENTS_CONTRACT.abi,
-        issuer
-      );
-      let stableTokenContract = new ethers.Contract(
-        ALFAJORES_CUSD_ADDRESS!,
-        STABLE_TOKEN_CONTRACT.abi,
-        issuer
-      );
-      let sCVars: ISocialConnect = {
-        issuerAddress: issuer.address,
-        federatedAttestationsContract,
-        odisPaymentsContract,
-        stableTokenContract,
-        authSigner,
-        serviceContext,
-        quotaFee,
-        blindingClient
-      };
-      setSc(sCVars);
-    }, [])
-
-    useEffect(() => {
-      // @ts-ignore: session was customized
-      session && session?.user?.name && setSocialIdentifier(session?.user.name);
-    }, [session]);
-
-    let {sendTransaction} = useSendTransaction({
-      to: addressToSendTo,
-      value: parseEther("0.05", "wei")
-    });
-
-    async function checkAndTopUpODISQuota() {
-      const { remainingQuota } = await OdisUtils.Quota.getPnpQuotaStatus(
-        sc!.issuerAddress,
-        sc!.authSigner,
-        sc!.serviceContext
-      );
-  
-      console.log("remaining ODIS quota", remainingQuota);
-      if (remainingQuota < 1) {
-        // give odis payment contract permission to use cUSD
-        const currentAllowance = await sc!.stableTokenContract.allowance(
-          sc!.issuerAddress,
-          sc!.odisPaymentsContract.address
-        );
-        console.log("current allowance:", currentAllowance.toString());
-        let enoughAllowance: boolean = false;
-  
-        if (sc!.quotaFee.gt(currentAllowance)) {
-          const approvalTxReceipt = await sc!.stableTokenContract
-            .increaseAllowance(
-              sc!.odisPaymentsContract.address,
-              sc!.quotaFee
-            )
-            .sendAndWaitForReceipt();
-          console.log("approval status", approvalTxReceipt.status);
-          enoughAllowance = approvalTxReceipt.status;
-        } else {
-          enoughAllowance = true;
-        }
-  
-        // increase quota
-        if (enoughAllowance) {
-          const odisPayment = await sc!.odisPaymentsContract
-            .payInCUSD(sc!.issuerAddress, sc!.quotaFee)
-            .sendAndWaitForReceipt();
-          console.log("odis payment tx status:", odisPayment.status);
-          console.log("odis payment tx hash:", odisPayment.transactionHash);
-        } else {
-          throw "cUSD approval failed";
-        }
-      }
-    }
-
-    async function getObfuscatedIdentifier(identifier: string){
-      let obfuscatedIdentifier = (
-        await OdisUtils.Identifier.getObfuscatedIdentifier(
-          identifier,
-          OdisUtils.Identifier.IdentifierPrefix.TWITTER,
-          sc!.issuerAddress,
-          sc!.authSigner,
-          sc!.serviceContext,
-          undefined,
-          undefined,
-          sc!.blindingClient
-        )
-      ).obfuscatedIdentifier;
-      return obfuscatedIdentifier;
-    }
-
-    async function registerAttestation(identifier: string, account: string) {
-      await checkAndTopUpODISQuota();
-
-      let nowTimeStamp = Math.floor(new Date().getTime() / 1000);
-  
-      // get identifier from phone number using ODIS
-      let obfuscatedIdentifier = getObfuscatedIdentifier(identifier);
-  
-      // upload identifier <-> address mapping to onchain registry
-      await sc!.federatedAttestationsContract.registerAttestationAsIssuer(
-        obfuscatedIdentifier,
-        account,
-        nowTimeStamp
-      );
-    }
-
-    async function lookupAddresses() {
-      
-      const obfuscatedIdentifier = getObfuscatedIdentifier(socialIdentifier);
-  
-      // query onchain mappings
-      let attestations =
-        await sc!.federatedAttestationsContract.lookupAttestations(obfuscatedIdentifier, [
-          sc!.issuerAddress,
-        ]);
-        let [latestAddress] = attestations.accounts;
-        setAddressToSendTo(latestAddress);
-      return attestations.accounts;
-    }
-
-    async function deregisterIdentifier(identifier: string){
-      try{
-        let obfuscatedIdentifier = getObfuscatedIdentifier(identifier);
-        await sc!.federatedAttestationsContract.revokeAttestation(obfuscatedIdentifier, sc!.issuerAddress, address);
-      }catch(err){
-
-      }
-    }
-
-    if(!iMounted) return null;
-    
-  
-    let steps = [
-      {
-        id: 1,
-        content: "User connection",
-        active: !!address
-      },
-      {
-        id: 2,
-        content: "Verify identifier ownership",
-        active: !!session
-      },
-      {
-        id: 3,
-        content: "Map identifier with connection address",
-        active: !!address && !!session
-      },
-      {
-        id: 4,
-        content: "Send value through identifier",
-        active: !!address && !!addressToSendTo
-      },
-      {
-        id: 5,
-        content: "De-register identifier from address",
-        active: !!address && !!session
-      }
-    ]
+    const {data:session} = useSession();
 
     if (session) {
         return (
@@ -236,7 +21,7 @@ export default function Home() {
                 </p>
                 <div className="mx-auto mt-5 flex max-w-fit space-x-4" >
                   <a href="" className="rounded-full border border-black bg-black px-5 py-2 text-sm text-white shadow-lg transition-all hover:bg-white hover:text-black">
-                    Users
+                    Dev connected
                   </a>
                   <Link href="/profile" className="flex items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-5 py-2 shadow-lg transition-all hover:border-gray-800" target="_blank" rel="noreferrer">
                     
@@ -268,7 +53,7 @@ export default function Home() {
         </p>
         <div className="mx-auto mt-5 flex max-w-fit space-x-4" >
           <a href="" className="rounded-full border border-black bg-black px-5 py-2 text-sm text-white shadow-lg transition-all hover:bg-white hover:text-black">
-            Create Masa domain
+            Dev not connected
           </a>
           
           <button onClick={() => signIn()}>
