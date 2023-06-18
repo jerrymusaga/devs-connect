@@ -1,197 +1,62 @@
-<!-- TITLE -->
-<p align="center"> 
- ![Screenshot from 2023-06-18 11-43-00](https://github.com/jerrymusaga/devs-connect/assets/94830918/63f85256-a588-4da0-9c2f-b3d75e6acc72)
- <h2 align="center">Celo Composer</h2>
- <p align="center">Build, deploy, and iterate quickly on decentralized applications using Celo.</p>
-</p>
-  <p align="center">
-    <a href="https://github.com/celo-org/celo-composer/graphs/stars">
-      <img alt="GitHub Contributors" src="https://img.shields.io/github/stars/celo-org/celo-composer?color=FCFF52" />
-    </a>
-    <a href="https://github.com/celo-org/celo-composer/graphs/contributors">
-      <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/celo-org/celo-composer?color=E7E3D4" />
-    </a>
-    <a href="https://github.com/celo-org/celo-composer/issues">
-      <img alt="Issues" src="https://img.shields.io/github/issues/celo-org/celo-composer?color=E7E3D4" />
-    </a>
-    <a href="https://github.com/celo-org/celo-composer/pulls">
-      <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/celo-org/celo-composer?color=E7E3D4" />
-    </a>
-    <a href="https://opensource.org/license/mit/">
-      <img alt="MIT License" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
-    </a>
-  </p>
-</p>
+## Devs-Connect
+![Screenshot from 2023-06-18 11-43-00](https://github.com/jerrymusaga/devs-connect/assets/94830918/63f85256-a588-4da0-9c2f-b3d75e6acc72)
 
-<!-- TABLE OF CONTENTS -->
-
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
-<!-- ABOUT THE PROJECT -->
 
 ## About The Project
 
-Celo Composer allows you to quickly build, deploy, and iterate on decentralized applications using Celo. It provides a number of frameworks, examples, and Celo specific functionality to help you get started with your next dApp.
+Devs-Connect is a platform created for developers to receive SBT or Celo token rewards after connecting their GitHub account and mapping it to their Celo wallet address directly from metamask. Developers can also check for the availability of soulnames and create new ones linked directly to their connected wallet address. With that, developers can easily reward fellow developers with either Celo tokens or SBT Masa tokens. This project can bring in more developers to adopt the use of Celo, social connect and masa into their daily activities.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Built With
 
-Celo Composer is built on Celo to make it simple to build dApps using a variety of front-end frameworks, and libraries.
+Devs-Connect is built on Celo Blockchain Network
 
 - [Celo](https://celo.org/)
 - [Solidity](https://docs.soliditylang.org/en/v0.8.19/)
 - [Next.js](https://nextjs.org/)
-- [React.js](https://reactjs.org/)
-- [Material UI](https://mui.com/)
-- [React Native](https://reactnative.dev/)
-- [Flutter](https://docs.flutter.dev/)
-- [React-celo](https://github.com/celo-org/react-celo/)
 - [Rainbowkit-celo](https://github.com/celo-org/rainbowkit-celo)
+- [Mongoose & Prisma](https://cloud.mongodb.com/)
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-<!-- GETTING STARTED -->
+## Features & Functionality
+1. Connect wallet using Rainbowkit wallet extension while opting for MetaMask
+2. Connect Github account to have access to the platform using Next-Auth.
+3. Search for developers using either GitHub names or Masa Soulname
+4. Search for celo soulnames availability and register the available names
+5. Send tokens to developer using GitHub names or soulnames instead of wallet addresses
 
 ## Prerequisites
 
 - Node
 - Git (v2.38 or higher)
+- Github account
+- MetaMask wallet extension with Alfajores network set
+- Alfajores testnet tokens
 
-## How to use Celo Composer
+## Current Challenges
+1. MetaMask - RPC Error: Internal JSON-RPC error.
+2. Register Attestation- Map social identifier to Github names
 
-The easiest way to start with Celo Composer is using `@celo/celo-composer`. This CLI tool lets you quickly start building dApps on Celo for multiple frameworks, including React (with either react-celo or rainbowkit-celo), React Native (w/o Expo), Flutter, and Angular. To get started, just run the following command, and follow the steps:
+## How to get Devs-Connect project running locally
 
-```bash
-npx @celo/celo-composer@latest create
-```
+1. `git clone git@github.com:jerrymusaga/devs-connect.git`
+2. `cd/devs-connect/packages/react-app/`
+3. `yarn install`
+4. `yarn run dev`
 
-### Front-end framework
-
-![Celo Composer select framework](https://github.com/celo-org/celo-composer/blob/main/images/readme/cc_step_1.png?raw=true)
-
-### Web3 library (for react-app)
-
-![Celo Composer select framework](https://github.com/celo-org/celo-composer/blob/main/images/readme/cc_step_2.png?raw=true)
-
-### Smart contract framework
-
-![Celo Composer tool selection](https://github.com/celo-org/celo-composer/blob/main/images/readme/cc_step_3.png?raw=true)
-
-### Subgraph
-
-![Celo Composer subgraph support](https://github.com/celo-org/celo-composer/blob/main/images/readme/cc_step_4.png?raw=true)
-
-### Name your dApp
-
-![Celo Composer dApp name](https://github.com/celo-org/celo-composer/blob/main/images/readme/cc_step_5.png?raw=true)
-
-**_🔥Voila, you have a dApp ready to go. Voila, you have a dApp ready to go. Start building your dApp on Celo._**
-
-### Getting started
-
-Once your custom dApp has been created, just install dependencies, either with `yarn` or `npm i`, and run the respective script from the `package.json` file.
-## Supported Frameworks
-
-### React
-
-- Support for Website and Progressive Web Application.
-- Works with all major crypto wallets.
-
-Check [package readme](https://github.com/celo-org/celo-composer/blob/main/packages/react-app/README.md) to learn more about.
-
-### React Native
-
-- Out of the box config, just focus on buidl.
-- Support for Android and IOS.
-- Works with and without [Expo](https://expo.dev/).
-- Working example app included.
-
-Check [package readme](https://github.com/celo-org/celo-composer/blob/main/packages/react-native-app/README.md) to learn more about.
-
-### Flutter
-
-- One command to get started - Type `flutter run` to start development in your mobile phone.
-- Works with all major mobile crypto wallets.
-- Support for Android, IOS (Web, Windows, and Linux coming soon).
-- Working example app included.
-
-Check [package readme](https://github.com/celo-org/celo-composer/blob/main/packages/flutter-app/README.md) to learn more about.
-
-### Angular
-
-- Support for Website and Progressive Web Application.
-- Works with all major crypto wallets.
-
-Check [package readme](https://github.com/celo-org/celo-composer/blob/main/packages/angular-app/README.md) to learn more about.
-
-<!-- USAGE EXAMPLES -->
-
-## 🔭 Learning Solidity
-
-📕 Read the docs: <https://docs.soliditylang.org>
-
-- [Primitive Data Types](https://solidity-by-example.org/primitives/)
-- [Mappings](https://solidity-by-example.org/mapping/)
-- [Structs](https://solidity-by-example.org/structs/)
-- [Modifiers](https://solidity-by-example.org/function-modifier/)
-- [Events](https://solidity-by-example.org/events/)
-- [Inheritance](https://solidity-by-example.org/inheritance/)
-- [Payable](https://solidity-by-example.org/payable/)
-- [Fallback](https://solidity-by-example.org/fallback/)
-
-📧 Learn the [Solidity globals and units](https://solidity.readthedocs.io/en/v0.8.19/units-and-global-variables.html)
-
-## Support
-
-Join the Celo Discord server at <https://chat.celo.org>. Reach out on the dedicated repo channel [here](https://discord.com/channels/600834479145353243/941003424298856448).
-
-<!-- ROADMAP -->
 
 ## Roadmap
 
-See the [open issues](https://github.com/celo-org/celo-composer/issues) for a full list of proposed features (and known issues).
+1. Get as many developers to get introduced to Celo, Masa & SocialConnect
 
-<p align="right">(<a href="#top">back to top</a>)</p>
 
-<!-- CONTRIBUTING -->
+## Screenshots
+![Screenshot from 2023-06-18 12-49-26](https://github.com/jerrymusaga/devs-connect/assets/94830918/4e4886b9-87cc-4832-bce8-64c01a9c25b5)
+![Screenshot from 2023-06-18 12-47-27](https://github.com/jerrymusaga/devs-connect/assets/94830918/43d4b467-a830-4b7d-8bb7-56e6e41b1f2e)
+![Screenshot from 2023-06-18 12-47-08](https://github.com/jerrymusaga/devs-connect/assets/94830918/cb8fb0d1-285b-48b1-9979-4f36759eb519)
+![Screenshot from 2023-06-18 12-46-51](https://github.com/jerrymusaga/devs-connect/assets/94830918/b8e9650b-ad9f-4a02-9e5f-4fdc97dbfdb0)
+![Screenshot from 2023-06-18 12-46-12](https://github.com/jerrymusaga/devs-connect/assets/94830918/d1dd00fe-d8c6-4e22-a805-59bbdb551b20)
+![Screenshot from 2023-06-18 12-45-09](https://github.com/jerrymusaga/devs-connect/assets/94830918/d021fab1-19bf-43b6-9089-606d796ce5c0)
+![Screenshot from 2023-06-18 12-38-55](https://github.com/jerrymusaga/devs-connect/assets/94830918/d94986cb-a1b5-4006-b528-56a6816ddc6f)
 
-## Contributing
 
-We welcome contributions from the community.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<!-- CONTACT -->
-## Contact
-
-- [@CeloDevs](https://twitter.com/CeloDevs)
-- [Discord](https://discord.com/invite/celo)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
