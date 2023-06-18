@@ -1,6 +1,6 @@
 <!-- TITLE -->
 <p align="center"> 
-  <img width="100px" src="![Screenshot from 2023-06-18 11-43-00](https://github.com/jerrymusaga/devs-connect/assets/94830918/63f85256-a588-4da0-9c2f-b3d75e6acc72)" align="center" alt="Celo" />
+ ![Screenshot from 2023-06-18 11-43-00](https://github.com/jerrymusaga/devs-connect/assets/94830918/63f85256-a588-4da0-9c2f-b3d75e6acc72)
  <h2 align="center">Celo Composer</h2>
  <p align="center">Build, deploy, and iterate quickly on decentralized applications using Celo.</p>
 </p>
